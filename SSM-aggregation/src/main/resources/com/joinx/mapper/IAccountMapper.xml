@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.joinx.mapper.ICountMapper">
+
+    <insert id="save" parameterType="Account">
+        insert into account (ACCNAME,PASSWORD,BALANCE,STATE,ACCDATE)
+        values (#{accName},#{passWord},#{balance},#{state},#{accDate})
+    </insert>
+    <select id="getCurUserBalance" parameterType="Account" resultType="Account">
+        select BALANCE,ACCID from account where ACCNAME=#{accName}
+    </select>
+    <update id="updateCurUserBalance" parameterType="Account" >
+        update account set BALANCE=BALANCE+#{balance} where ACCID=#{accID}
+    </update>
+</mapper>

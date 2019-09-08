@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:mvc="http://www.springframework.org/schema/mvc"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd http://www.springframework.org/schema/context https://www.springframework.org/schema/context/spring-context.xsd http://www.springframework.org/schema/cache http://www.springframework.org/schema/cache/spring-cache.xsd http://www.springframework.org/schema/mvc https://www.springframework.org/schema/mvc/spring-mvc.xsd">
+        <context:component-scan base-package="com.joinx"/>
+        <context:annotation-config/>
+        <mvc:annotation-driven/>
+        <bean class="org.springframework.web.servlet.view.InternalResourceViewResolver">
+            <property name="prefix" value="/" />
+            <property name="suffix" value=".jsp" />
+        </bean>
+    <!-- 配置MultipartResolver，用于上传文件，使用spring的CommonsMultipartResolver -->
+    <bean id="multipartResolver" class="org.springframework.web.multipart.commons.CommonsMultipartResolver">
+        <property name="maxUploadSize" value="15000000"/>
+        <property name="defaultEncoding" value="UTF-8"/>
+    </bean>
+
+
+
+        <!--配置静态资源放行-->
+        <mvc:resources mapping="/xxx/**" location="/js/"/>
+        <mvc:resources mapping="/yyy/**" location="/img/"/>
+        <mvc:resources mapping="/down/**" location="/img/"/>
+        <!-- 国际化资源文件 -->
+        <bean id="messageSource" class="org.springframework.context.support.ResourceBundleMessageSource">
+            <!-- 表示多语言配置文件在根路径下，以message开头的文件-->
+            <property name="basename" value="message"/>
+        </bean>
+    <!-- 配置LocaleChangeInterceptor 主要用于获取请求中的locale信息，将期转为Locale对像，获取LocaleResolver对象-->
+    <mvc:interceptors>
+        <!--?lang=zh_CN    message_zh_CN.properties-->
+        <bean id="localeChangeInterceptor" class="org.springframework.web.servlet.i18n.LocaleChangeInterceptor">
+            <!--可以通过改变lang值来更换资源文件-->
+            <property name="paramName" value="lang"/>
+        </bean>
+    </mvc:interceptors>
+    <bean id="localeResolver"
+          class="org.springframework.web.servlet.i18n.SessionLocaleResolver"></bean>
+        <!--全局异常配置2-->
+        <bean class="org.springframework.web.servlet.handler.SimpleMappingExceptionResolver">
+                <property name="exceptionMappings">
+                        <props>
+                            <prop key="java.lang.RuntimeException">error</prop>
+                        </props>
+                </property>
+        </bean>
+        <!--<context:property-placeholder location="classpath:resources.properties"></context:property-placeholder>-->
+        <!--<bean id="initController" class="InitController">-->
+        <!--<property name="viewName" value="${viewName}"></property>-->
+        <!--</bean>-->
+        <!--<bean id="mapping" class="org.springframework.web.servlet.handler.SimpleUrlHandlerMapping" >-->
+            <!--<property name="urlMap">-->
+                <!--<map>-->
+                    <!--<entry key="lsi" value="initController"/>-->
+                <!--</map>-->
+            <!--</property>-->
+            <!--&lt;!&ndash;<property name="mappings">&ndash;&gt;-->
+                <!--&lt;!&ndash;<props>&ndash;&gt;-->
+                    <!--&lt;!&ndash;&lt;!&ndash;映射&ndash;&gt;&ndash;&gt;-->
+                    <!--&lt;!&ndash;<prop key="/login">initController</prop>&ndash;&gt;-->
+                <!--&lt;!&ndash;</props>&ndash;&gt;-->
+            <!--&lt;!&ndash;</property>&ndash;&gt;-->
+        <!--</bean>-->
+</beans>
